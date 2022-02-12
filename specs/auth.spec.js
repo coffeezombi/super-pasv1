@@ -1,51 +1,40 @@
-import supertest from 'supertest'
-import { expect } from 'chai'
+import {expect} from 'chai'
+import AuthHelper from '../helpers/auth.helper'
 
 
 describe('Auth', function () {
-    const request = supertest(process.env.BASE_URL)
+
+    let authHepler = new AuthHelper()
 
     describe('Successful log in', function () {
-        let result
 
         before(async function () {
-           await request
-                .post('/auth')
-                .send({ login: process.env.LOGIN, password: process.env.PASSWORD })
-               .then(res => {
-                   result = res
-               })
+            await authHepler.login(process.env.LOGIN, process.env.PASSWORD)
         })
 
         it('response status code is 200', function () {
-                    expect(result.statusCode).to.eq(200)
+            expect(authHepler.response.statusCode).to.eq(200)
         })
 
         it('response body contains authorization token', function () {
-            expect(result.body.token).not.to.be.undefined
+            expect(authHepler.response.body.token).not.to.be.undefined
         })
     })
 
 
     describe('Log in with invalid credentials', function () {
-        let result
 
         before(async function () {
-            await request
-                .post('/auth')
-                .send({ login: 'invalid', password: 'invalid' })
-                .then(res => {
-                    result = res
-                })
+            await authHepler.login('invalid', 'invalid')
         })
 
         it('response status code is 404', function () {
-            expect(result.statusCode).to.eq(404)
+            expect(authHepler.response.statusCode).to.eq(404)
         })
 
 
         it('response body contains error message', function () {
-                    expect(result.body.message).to.be.eq('Wrong login or password.')
-                })
+            expect(authHepler.response.body.message).to.be.eq('Wrong login or password.')
         })
+    })
 })
