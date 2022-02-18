@@ -59,18 +59,19 @@ describe('Users', function () {
             expect(userHelper.response.statusCode).to.eq(200)
         })
 
-        it('response body contains user id', function () {
+        it('response body array item contains user id', function () {
             expect(getRandomItem(userHelper.response.body).id).not.to.be.undefined
         })
 
-        it('response body contains 2 or more items', function () {
+        it('response body list of 2 or more items', function () {
             expect(userHelper.response.body.length).to.be.at.least(2)
         })
 
         it('response body array item contains initial amount', function () {
-            expect(userHelper.response.body.amount).not.to.be.undefined
+            expect(getRandomItem(userHelper.response.body).amount).not.to.be.undefined
         })
     })
+
     describe('user deletion', function () {
         before(async function () {
             await userHelper.delete(userId)

@@ -8,6 +8,7 @@ class UsersHelper {
           .post('/users')
           .set('Authorization', `Bearer ${process.env.TOKEN}`)
           .then(res => {
+              console.log(res.body)
              this.response = res
           })
    }
